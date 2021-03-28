@@ -15,7 +15,17 @@
                         Tổ chức
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/organization/1') }}" ><i class="fas fa-fw fa-users"></i> Tổ chức của tôi </a>
+                        <a class="nav-link" href="" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1"><i class="fas fa-f fa-users"></i>Tổ chức của tôi</a>
+                        <div id="submenu-1" class="collapse submenu" style="">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ url('/organization/1') }}">Chi tiết</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Tô chức con</a>
+                                </li>
+                            </ul>
+                        <div/>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#" ><i class="fas fa-fw fa-users"></i> Nhóm </a>
@@ -34,6 +44,19 @@
                         <a class="nav-link" href="#" ><i class="fas fa-fw fa-users"></i>Nhân viên</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="" data-toggle="collapse" aria-expanded="false" data-target="#submenu-2" aria-controls="submenu-2"><i class="fas fa-f fa-users"></i>Quyền hạn và chức vụ</a>
+                        <div id="submenu-2" class="collapse submenu" style="">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="">Chức vụ</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Quyền hạn</a>
+                                </li>
+                            </ul>
+                        <div/>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="#" ><i class="fas fa-fw fa-users"></i>Khánh hàng</a>
                     </li>
 
@@ -45,13 +68,6 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"><i class="fas fa-fw fa-columns"></i>Sản phẩm</a>
-                    </li>
-
-                    <li class="nav-divider">
-                       ______
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{url('/settings')}}"><i class="fas fa-fw fa-cog"></i>Cài đặt</a>
                     </li>
                     {{-- <li class="nav-item">
                         <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-10" aria-controls="submenu-10"><i class="fas fa-f fa-folder"></i>Menu Level</a>
