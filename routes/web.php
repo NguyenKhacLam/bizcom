@@ -3,6 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,4 +31,17 @@ Route::prefix('organization')->group(function(){
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', function(){
+    // $role = Role::create(['name' => 'member']);
+    // $role = Role::find(2);
+    // $permission = Permission::find(4);
+    // $role->givePermissionTo($permission);
+    $user = User::find(1);
+    // $user->assignRole('admin', 'member');
+    $roles = Permission::all();
+    $user->givePermissionTo($roles);
+    // dd($roles);
+    // $permissionNames = $user->getPermissionNames(); // collection of name strings
+    // $permissions = $user->permissions;
+    // dd($user);
+});

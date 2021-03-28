@@ -26,7 +26,9 @@
             <div class="container-fluid dashboard-content">
                 <div class="d-flex justify-content-between">
                     <h2>Chọn tổ chức</h2>
-                    <a href="{{url('/organization/create')}}" class="btn btn-space btn-primary">Tạo<i class="fa fa-fw fa-plus" aria-hidden="true"></i></a>
+                    @can('create organization')
+                        <a href="{{url('/organization/create')}}" class="btn btn-space btn-primary">Tạo<i class="fa fa-fw fa-plus" aria-hidden="true"></i></a>
+                    @endcan
                 </div>
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
