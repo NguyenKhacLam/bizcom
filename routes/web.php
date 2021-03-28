@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// View
+Route::get('/', [PageController::class, 'login']);
+
+Route::get('/', [PageController::class, 'dashboard']);
+Route::get('/settings', [PageController::class, 'settings']);
+
+Route::prefix('organization')->group(function(){
+    Route::get('/create', [PageController::class, 'create_organization']);
+    Route::get('/{uk}', [PageController::class, 'single_organization']);
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

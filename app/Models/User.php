@@ -6,10 +6,13 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Observers\UserObserver;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+    const LENGTH=8;
 
     /**
      * The attributes that are mass assignable.
@@ -17,10 +20,16 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'name','first_name','last_name','username', 'email', 'password','phone','dob','gender','fb_id','google_id','fb_page'
     ];
+
+    protected $requires=[
+        'first_name',
+        'last_name',
+        'email',
+        'phone',
+    ];
+
 
     /**
      * The attributes that should be hidden for arrays.
@@ -40,4 +49,15 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public static function makeUkString()
+    {
+        $str=strtoupper(Str::random(User::LENGTH));
+
+        $exist=User::where('uk',$str)->first();
+
+        if(empty($exist)) return $str;
+        else $this->makeUkString();
+    }
+
 }
