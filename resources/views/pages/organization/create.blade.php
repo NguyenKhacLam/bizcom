@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="src/assets/vendor/bootstrap/css/bootstrap.min.css">
     <link href="src/assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
     <link rel="stylesheet" href="src/assets/libs/css/style.css">
+    <link rel="stylesheet" href="src/assets/libs/css/loading.css">
     <link rel="stylesheet" href="src/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
     <link rel="stylesheet" href="src/assets/vendor/charts/chartist-bundle/chartist.css">
     <link rel="stylesheet" href="src/assets/vendor/charts/morris-bundle/morris.css">
@@ -21,6 +22,7 @@
 
 <body>
     @include('inc.header')
+    @include('partials.loading')
     <div class="dashboard-main-wrapper">
         <div class="dashboard-ecommerce">
             <div class="container-fluid dashboard-content">
@@ -31,52 +33,122 @@
                 <div class="card">
                     <h5 class="card-header">Tạo tổ chức mới</h5>
                     <div class="card-body">
-                        <form>
+                        <form action="{{url('/organization')}}" method="POST" enctype="multipart/form-data">
+                            @csrf
                             <div class="row">
                                 <div class="col-md-6 form-group">
                                     <label for="name" class="col-form-label">Tên tổ chức</label>
-                                    <input id="name" type="text" class="form-control" placeholder="Tên tổ chức">
+                                    <input id="name" name="name" type="text" class="form-control @error('name') is-invalid @enderror" placeholder="Tên tổ chức">
+
+                                    @error('name')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                                 <div class="col-md-6 form-group">
                                     <label for="short_name" class="col-form-label">Tên rút gọn</label>
-                                    <input id="short_name" type="text" class="form-control" placeholder="Tên rút gọn">
+                                    <input id="short_name" name="short_name" type="text" class="form-control @error('short_name') is-invalid @enderror" placeholder="Tên rút gọn">
+
+                                    @error('short_name')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label for="email">Email</label>
-                                    <input id="email" type="email" placeholder="name@example.com" class="form-control">
+                                    <input id="email" name="email" type="email" placeholder="name@example.com" class="form-control @error('email') is-invalid @enderror">
+
+                                    @error('email')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label for="phone">Số điện thoại</label>
                                     <small class="text-muted">(999) 999-9999</small>
-                                    <input id="phone" type="text" placeholder="Số điện thoại" class="form-control">
+                                    <input id="phone" name="phone" type="text" placeholder="Số điện thoại" class="form-control @error('phone') is-invalid @enderror">
+
+                                    @error('email')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label for="website">Website</label>
-                                    <input id="website" type="text" placeholder="Website" class="form-control">
+                                    <input id="website" name="website" type="text" placeholder="Website" class="form-control">
                                 </div>
                                 <div class="col-md-3 form-group">
-                                    <label for="fouding">Ngày thành lập</label>
-                                    <input id="fouding" type="date" placeholder="Ngày thành lập" class="form-control">
+                                    <label for="founding">Ngày thành lập</label>
+                                    <input id="founding" name="founding" type="date" placeholder="Ngày thành lập" class="form-control @error('founding') is-invalid @enderror">
+
+                                    @error('founding')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
-                                <div class="col-md-6 form-group">
+                                <div class="col-md-4 form-group">
                                     <label for="rep_by">Đại diện</label>
-                                    <input id="rep_by" type="text" placeholder="Đại diện bởi" class="form-control">
+                                    <input id="rep_by" name="rep_by" type="text" placeholder="Đại diện bởi" class="form-control @error('rep_by') is-invalid @enderror">
+
+                                    @error('rep_by')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
-                                <div class="col-md-6 form-group">
+                                <div class="col-md-4 form-group">
                                     <label for="business">Ngành nghề</label>
-                                    <input id="business" type="text" placeholder="Ngành nghề" class="form-control">
+                                    <input id="business" name="business" type="text" placeholder="Ngành nghề" class="form-control @error('business') is-invalid @enderror">
+
+                                    @error('business')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="parent_id">Tổ chức con của</label>
+                                    <select name="parent_id" id="parent_id" class="form-control">
+                                        <option value="">---</option>
+                                        @foreach ($organizations as $item)
+                                            <option value="{{$item->id}}">{{$item->name}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="col-md-12 form-group">
                                     <label for="desc">Mô tả</label>
-                                    <textarea class="form-control" id="desc" rows="3"></textarea>
+                                    <textarea class="form-control @error('desc') is-invalid @enderror" name="desc" id="desc" rows="3"></textarea>
+
+                                    @error('desc')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                                 <div class="col-md-6 form-group">
                                     <label class="" for="banner">Banner</label>
-                                    <input type="file" id="banner">
+                                    <input type="file" class="@error('banner') is-invalid @enderror" id="banner" name="banner">
+
+                                    @error('banner')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                                 <div class="col-md-6 form-group">
                                     <label class="" for="banner">Avatar</label>
-                                    <input type="file" id="avatar">
+                                    <input type="file" id="avatar" class="@error('avatar') is-invalid @enderror" name="avatar">
+
+                                    @error('avatar')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                                 <div class="col-md-12 form-group">
                                     <button type="submit" class="btn btn-primary">Tạo</button>
@@ -106,7 +178,11 @@
     <!-- morris js -->
     <script src="src/assets/vendor/charts/morris-bundle/raphael.min.js"></script>
     <script src="src/assets/vendor/charts/morris-bundle/morris.js"></script>
-
+    <script>
+        $(window).on("load", ()=>{
+            $(".loading-wrapper").fadeOut("show");
+        })
+    </script>
     <script src="src/assets/libs/js/dashboard-ecommerce.js"></script>
 </body>
 

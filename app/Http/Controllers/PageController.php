@@ -11,11 +11,6 @@ class PageController extends Controller
         $this->middleware('auth');
     }
 
-    // Authentication
-    public function login(){
-        return view('pages.authentication.login');
-    }
-
     public function dashboard(){
         return view('pages.dashboard')->with('page_title', 'Trang chủ');
     }

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\OrganizationController;
 
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -17,31 +18,16 @@ use App\Models\User;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-// View
-Route::get('/', [PageController::class, 'login']);
-
-Route::get('/', [PageController::class, 'dashboard']);
+Route::get('/', [OrganizationController::class, 'index']);
 Route::get('/settings', [PageController::class, 'settings']);
 
-Route::prefix('organization')->group(function(){
-    Route::get('/create', [PageController::class, 'create_organization']);
-    Route::get('/{uk}', [PageController::class, 'single_organization']);
-});
+Route::resources([
+    'organization' => 'App\Http\Controllers\OrganizationController'
+]);
 
 Auth::routes();
 
-Route::get('/home', function(){
-    // $role = Role::create(['name' => 'member']);
-    // $role = Role::find(2);
-    // $permission = Permission::find(4);
-    // $role->givePermissionTo($permission);
-    $user = User::find(1);
-    // $user->assignRole('admin', 'member');
-    $roles = Permission::all();
-    $user->givePermissionTo($roles);
-    // dd($roles);
-    // $permissionNames = $user->getPermissionNames(); // collection of name strings
-    // $permissions = $user->permissions;
-    // dd($user);
+Route::get('users/{id}', function ($id) {
+    $user = User::find($id)->organizations();
+    dd($user);
 });

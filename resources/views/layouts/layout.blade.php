@@ -6,7 +6,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <base href="{{asset('')}}">
-    <title>Login</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Bizcom</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="src/assets/vendor/bootstrap/css/bootstrap.min.css">
     <link href="src/assets/vendor/fonts/circular-std/style.css" rel="stylesheet">

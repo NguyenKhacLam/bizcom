@@ -3297,6 +3297,11 @@ btn-link
 }
 
 .card-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    -webkit-box-orient: vertical;
 }
 
 .card-footer {
@@ -3317,6 +3322,11 @@ btn-link
 }
 
 .card-toolbar-tabs {
+}
+
+.card-img-top {
+    height: 342px;
+    object-fit: cover;
 }
 
 .card-toolbar-tabs .nav.nav-pills {

@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="src/assets/vendor/bootstrap/css/bootstrap.min.css">
     <link href="src/assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
     <link rel="stylesheet" href="src/assets/libs/css/style.css">
+    <link rel="stylesheet" href="src/assets/libs/css/loading.css">
     <link rel="stylesheet" href="src/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
     <link rel="stylesheet" href="src/assets/vendor/charts/chartist-bundle/chartist.css">
     <link rel="stylesheet" href="src/assets/vendor/charts/morris-bundle/morris.css">
@@ -20,6 +21,7 @@
 </head>
 
 <body>
+    @include('partials.loading')
     <!-- ============================================================== -->
     <!-- main wrapper -->
     <!-- ============================================================== -->
@@ -84,6 +86,11 @@
     <script src="src/assets/vendor/charts/c3charts/C3chartjs.js"></script>
     <!-- sweetalert -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        $(window).on("load", ()=>{
+            $(".loading-wrapper").fadeOut("show");
+        })
+    </script>
     <script src="src/assets/libs/js/dashboard-ecommerce.js"></script>
     <script src="src/assets/libs/js/alert.js"></script>
 </body>
