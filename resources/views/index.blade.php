@@ -93,6 +93,7 @@
     </script>
     <script src="src/assets/libs/js/dashboard-ecommerce.js"></script>
     <script src="src/assets/libs/js/alert.js"></script>
+    <script src="src/assets/libs/js/roles.js"></script>
 </body>
 
 </html>

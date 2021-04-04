@@ -3,6 +3,8 @@
 namespace App\Observers;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\CreateAccount;
 
 class UserObserver
 {
@@ -14,7 +16,7 @@ class UserObserver
      */
     public function created(User $user)
     {
-        //
+        Mail::to($user)->send(new CreateAccount($user, $user->password, 'Thông báo tạo mới tài khoản trên hệ thống '.env('APP_NAME')));
     }
 
     /**

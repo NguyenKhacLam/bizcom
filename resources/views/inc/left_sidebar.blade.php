@@ -1,3 +1,8 @@
+<?php
+    function getOrganizationParams(){
+        return explode("/organization", $_SERVER['REQUEST_URI'])[1];
+    }
+?>
 <div class="nav-left-sidebar sidebar-dark">
     <div class="menu-list">
         <nav class="navbar navbar-expand-lg navbar-light">
@@ -19,7 +24,7 @@
                         <div id="submenu-1" class="collapse submenu" style="">
                             <ul class="nav flex-column">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ url('/organization/1') }}">Chi tiết</a>
+                                    <a class="nav-link" href="/organization{{getOrganizationParams()}}">Chi tiết</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="#">Tô chức con</a>
@@ -48,7 +53,7 @@
                         <div id="submenu-2" class="collapse submenu" style="">
                             <ul class="nav flex-column">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="">Chức vụ</a>
+                                    <a class="nav-link" href="/organization{{getOrganizationParams()}}/roles">Chức vụ</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="#">Quyền hạn</a>

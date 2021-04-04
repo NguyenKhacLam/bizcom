@@ -61,24 +61,24 @@ class OrganizationController extends Controller
      */
     public function store(Request $request)
     {
-        // $validator = Validator::make($request->all(), [
-        //     'name' => 'required|string',
-        //     'short_name' => 'required|string',
-        //     'email' => 'required|email',
-        //     'phone' => 'required|string|min:9|max:12',
-        //     'founding' => 'required',
-        //     'address' => 'required',
-        //     'rep_by' => 'required|string',
-        //     'business' => 'required|string',
-        //     'desc' => 'required|string',
-        //     'avatar' => 'required|image|mimes:jpg,png,jpeg',
-        //     'banner' => 'required|image|mimes:jpg,png,jpeg',
-        // ]);
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'short_name' => 'required|string',
+            'email' => 'required|email',
+            'phone' => 'required|string|min:9|max:12',
+            'founding' => 'required',
+            'address' => 'required',
+            'rep_by' => 'required|string',
+            'business' => 'required|string',
+            'desc' => 'required|string',
+            'avatar' => 'required|image|mimes:jpg,png,jpeg',
+            'banner' => 'required|image|mimes:jpg,png,jpeg',
+        ]);
 
-        // if($validator->fails()){
-        //     $messages = $validator->messages();
-        //     return redirect('/organization/create')->withErrors($messages);
-        // }
+        if($validator->fails()){
+            $messages = $validator->messages();
+            return redirect('/organization/create')->withErrors($messages);
+        }
 
         $organization = new Organization();
 
@@ -131,6 +131,7 @@ class OrganizationController extends Controller
      */
     public function show($uk)
     {
+        // $organization = DB::table('organizations')->where('uk','=', $uk);
         return view('pages.organization.single_organization')->with('page_title', 'Chi tiết tổ chức');
     }
 
@@ -140,7 +141,7 @@ class OrganizationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($uk)
     {
         //
     }
@@ -152,7 +153,7 @@ class OrganizationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $uk)
     {
         //
     }
@@ -163,7 +164,7 @@ class OrganizationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($uk)
     {
         //
     }
