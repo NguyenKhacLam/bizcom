@@ -232,5 +232,9 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-xl-12">
+            <button class="btn btn-danger btn-block" type="button" id="closeOrganization">Đóng tổ chức</button>
+        </div>
     </div>
 @endsection

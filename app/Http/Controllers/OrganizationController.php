@@ -29,9 +29,21 @@ class OrganizationController extends Controller
             ->join('organization_user', 'organization_user.user_id', '=', 'users.id')
             ->join('organizations', 'organization_user.organization_id', '=', 'organizations.id')
             ->where('users.id', '=', $user->id)
+            ->whereNull('organizations.parent_id')
             ->select('organizations.id', 'organizations.uk', 'organizations.name', 'organizations.short_name', 'organizations.desc', 'organizations.avatar', 'organizations.banner')
             ->get();
         return view('pages.dashboard')->with('page_title', 'Trang chủ')->with('organizations', $organizations);
+    }
+
+
+    public function showChild($uk)
+    {
+        $cur_or = DB::table('organizations')->where('uk','=',$uk)->first();
+        $organizations =
+            DB::table('organizations')
+            ->where('parent_id','=', $cur_or->id)
+            ->get();
+        return view('pages.organization.child')->with('page_title', 'Tổ chức con')->with('organizations', $organizations);
     }
 
     /**
@@ -71,12 +83,13 @@ class OrganizationController extends Controller
             'rep_by' => 'required|string',
             'business' => 'required|string',
             'desc' => 'required|string',
-            'avatar' => 'required|image|mimes:jpg,png,jpeg',
-            'banner' => 'required|image|mimes:jpg,png,jpeg',
+            // 'avatar' => 'image|mimes:jpeg,png,jpg,gif,svg',
+            // 'banner' => 'image|mimes:jpeg,png,jpg,gif,svg'
         ]);
 
         if($validator->fails()){
             $messages = $validator->messages();
+            dd($messages);
             return redirect('/organization/create')->withErrors($messages);
         }
 
@@ -143,7 +156,17 @@ class OrganizationController extends Controller
      */
     public function edit($uk)
     {
-        //
+        $user = Auth::user();
+        $organizations =
+            DB::table('users')
+            ->join('organization_user', 'organization_user.user_id', '=', 'users.id')
+            ->join('organizations', 'organization_user.organization_id', '=', 'organizations.id')
+            ->where('users.id', '=', $user->id)
+            ->select('organizations.id', 'organizations.uk', 'organizations.name', 'organizations.short_name', 'organizations.desc', 'organizations.avatar', 'organizations.banner')
+            ->get();
+
+        $organization = DB::table('organizations')->where('uk','=', $uk)->first();
+        return view('pages.organization.update')->with('page_title', 'Chỉnh sửa thông tin')->with('organization', $organization)->with('organizations', $organizations);
     }
 
     /**
@@ -155,7 +178,41 @@ class OrganizationController extends Controller
      */
     public function update(Request $request, $uk)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'short_name' => 'required|string',
+            'email' => 'required|email',
+            'phone' => 'required|string|min:9|max:12',
+            'founding' => 'required',
+            'address' => 'required',
+            'rep_by' => 'required|string',
+            'business' => 'required|string',
+            'desc' => 'required|string',
+            // 'avatar' => 'image|mimes:jpeg,png,jpg,gif,svg',
+            // 'banner' => 'image|mimes:jpeg,png,jpg,gif,svg'
+        ]);
+
+        if($validator->fails()){
+            $messages = $validator->messages();
+            return redirect('/organization/create')->withErrors($messages);
+        }
+        $organization = Organization::where('uk','=', $uk)->first();
+
+        $request->input('name') && $organization->name = $request->input('name');
+        $request->input('short_name') && $organization->short_name = $request->input('short_name');
+        $request->input('desc') && $organization->desc = $request->input('desc');
+        $request->input('address') && $organization->address = $request->input('address');
+        $request->input('phone') && $organization->phone = $request->input('phone');
+        $request->input('email') && $organization->email = $request->input('email');
+        $request->input('website') && $organization->website = $request->input('website');
+        $request->input('founding') && $organization->founding = $request->input('founding');
+        $request->input('rep_by') && $organization->rep_by = $request->input('rep_by');
+        $request->input('business') && $organization->business = $request->input('business');
+        $request->input('parent_id') && $organization->parent_id = $request->input('parent_id');
+
+        $organization->save();
+
+        return redirect('/organization'.'/'.$uk);
     }
 
     /**

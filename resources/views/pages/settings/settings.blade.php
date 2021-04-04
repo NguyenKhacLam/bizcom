@@ -27,9 +27,6 @@
                         <div class="form-group">
                             <button class="btn btn-primary" type="submit" style="width: 100%">Lưu</button>
                         </div>
-                        <div class="form-group">
-                            <button class="btn btn-danger" type="button" style="width: 100%" id="closeOrganization">Đóng tổ chức</button>
-                        </div>
                     </form>
                 </div>
             </div>

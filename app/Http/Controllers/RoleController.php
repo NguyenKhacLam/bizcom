@@ -73,8 +73,7 @@ class RoleController extends Controller
             ->where('roles.id', '=', request()->segment(4))
             ->get();
 
-        return response()->json($permission)
-;
+        return response()->json($permission);
     }
 
     /**

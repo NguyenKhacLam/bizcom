@@ -23,9 +23,11 @@ Route::get('/', [OrganizationController::class, 'index']);
 Route::get('/settings', [PageController::class, 'settings']);
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('organization/{uk}/child', [OrganizationController::class, 'showChild']);
     Route::resources([
         'organization' => 'App\Http\Controllers\OrganizationController',
         'organization/{uk}/roles' => 'App\Http\Controllers\RoleController',
+        'organization/{uk}/users' => 'App\Http\Controllers\UserController',
     ]);
 });
 

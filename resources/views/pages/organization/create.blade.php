@@ -121,6 +121,16 @@
                                     </select>
                                 </div>
                                 <div class="col-md-12 form-group">
+                                    <label for="address">Địa chỉ</label>
+                                    <input id="address" name="address" type="text" placeholder="Đại diện bởi" class="form-control @error('address') is-invalid @enderror">
+
+                                    @error('address')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="col-md-12 form-group">
                                     <label for="desc">Mô tả</label>
                                     <textarea class="form-control @error('desc') is-invalid @enderror" name="desc" id="desc" rows="3"></textarea>
 

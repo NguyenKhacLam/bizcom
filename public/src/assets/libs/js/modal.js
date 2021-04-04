@@ -19,3 +19,14 @@ $("#editForm").on("show.bs.modal", function(e) {
         }
     );
 });
+
+$("#userDetailsModal").on("show.bs.modal", function(e) {
+    let id = $(e.relatedTarget).data("id");
+    userData = users.filter(i => id == i.id)[0];
+
+    console.log(userData);
+    $("#userDetailsModal .modal-header h4").text(
+        `${userData.first_name} ${userData.last_name}`
+    );
+    // console.log(id);
+});
