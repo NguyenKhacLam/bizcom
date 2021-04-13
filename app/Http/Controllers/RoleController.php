@@ -63,14 +63,14 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($uk, $role_id)
     {
         $permission =
             DB::table('roles')
             ->join("role_has_permissions", "role_has_permissions.role_id", '=', "roles.id")
             ->join("permissions", "role_has_permissions.permission_id", '=', "permissions.id")
             ->select('permissions.id', 'permissions.name')
-            ->where('roles.id', '=', request()->segment(4))
+            ->where('roles.id', '=', $role_id)
             ->get();
 
         return response()->json($permission);

@@ -23,6 +23,20 @@ jQuery(document).ready(function($) {
         });
     }
 
+    if ($("table#customerTable").length) {
+        $(document).ready(function() {
+            var table = $("table#customerTable").DataTable({
+                lengthChange: false,
+                buttons: ["copy", "excel", "pdf", "print"]
+            });
+
+            table
+                .buttons()
+                .container()
+                .appendTo("#customerTable_wrapper .col-md-6:eq(0)");
+        });
+    }
+
     if ($("#example2").length) {
         $(document).ready(function() {
             $(document).ready(function() {

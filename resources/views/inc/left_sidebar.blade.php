@@ -29,13 +29,13 @@
                         <div id="submenu-1" class="collapse submenu" style="">
                             <ul class="nav flex-column">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/organization/{{getOrganizationParams()}}">Chi tiết</a>
+                                    <a class="nav-link" href="{{route('organizations.single', getOrganizationParams())}}">Chi tiết</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/organization/{{getOrganizationParams()}}/edit">Sửa thông tin</a>
+                                    <a class="nav-link" href="{{route('organizations.edit_form', getOrganizationParams())}}">Sửa thông tin</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/organization/{{getOrganizationParams()}}/child">Tô chức con</a>
+                                    <a class="nav-link" href="{{route('organizations.child', getOrganizationParams())}}">Tô chức con</a>
                                 </li>
                             </ul>
                         <div/>
@@ -54,14 +54,14 @@
                         Người dùng
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/organization/{{getOrganizationParams()}}/users" ><i class="fas fa-fw fa-users"></i>Nhân viên</a>
+                        <a class="nav-link" href="{{route('organizations.users', getOrganizationParams())}}" ><i class="fas fa-fw fa-users"></i>Nhân viên</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="" data-toggle="collapse" aria-expanded="false" data-target="#submenu-2" aria-controls="submenu-2"><i class="fas fa-f fa-users"></i>Quyền hạn và chức vụ</a>
                         <div id="submenu-2" class="collapse submenu" style="">
                             <ul class="nav flex-column">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/organization/{{getOrganizationParams()}}/roles">Chức vụ</a>
+                                    <a class="nav-link" href="{{route('organizations.roles', getOrganizationParams())}}">Chức vụ</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="#">Quyền hạn</a>
@@ -70,7 +70,7 @@
                         <div/>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" ><i class="fas fa-fw fa-users"></i>Khánh hàng</a>
+                        <a class="nav-link" href="/organization/{{getOrganizationParams()}}/customers"><i class="fas fa-fw fa-users"></i>Khánh hàng</a>
                     </li>
 
                     <li class="nav-divider">

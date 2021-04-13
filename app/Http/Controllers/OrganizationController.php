@@ -210,9 +210,24 @@ class OrganizationController extends Controller
         $request->input('business') && $organization->business = $request->input('business');
         $request->input('parent_id') && $organization->parent_id = $request->input('parent_id');
 
+        // File upload
+        if ($banner = $request->file('banner')){
+            $name = time().'_'.$banner->getClientOriginalName();
+            if($banner->move('uploads', $name)){
+                $organization->banner = $name;
+            }
+        }
+
+        if ($avatar = $request->file('avatar')){
+            $name = time().'_'.$avatar->getClientOriginalName();
+            if($avatar->move('uploads', $name)){
+                $organization->avatar = $name;
+            }
+        }
+
         $organization->save();
 
-        return redirect('/organization'.'/'.$uk);
+        return redirect('/');
     }
 
     /**

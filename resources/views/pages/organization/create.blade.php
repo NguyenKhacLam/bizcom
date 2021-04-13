@@ -33,7 +33,7 @@
                 <div class="card">
                     <h5 class="card-header">Tạo tổ chức mới</h5>
                     <div class="card-body">
-                        <form action="{{url('/organization')}}" method="POST" enctype="multipart/form-data">
+                        <form action="{{route('organizations.create')}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
                                 <div class="col-md-6 form-group">

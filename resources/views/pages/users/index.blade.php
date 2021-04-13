@@ -100,10 +100,5 @@
           </div>
         </div>
       </div>
-    <script>
-        const data = '<?php echo $users?>'
-        const users = JSON.parse(data)
-    </script>
-    <script src="src/assets/libs/js/users.js"></script>
 
 @endsection

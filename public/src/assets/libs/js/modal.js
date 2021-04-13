@@ -1,6 +1,6 @@
 function getOrganizationUk() {
     let url = window.location.href;
-    return url.split("/organization/")[1].split("/")[0];
+    return url.split("/organizations/")[1].split("/")[0];
 }
 
 $("#editForm").on("show.bs.modal", function(e) {
@@ -11,7 +11,7 @@ $("#editForm").on("show.bs.modal", function(e) {
     const content = $("#editForm .content");
 
     $.get(
-        `/organization/${getOrganizationUk()}/roles/${id}`,
+        `/organizations/${getOrganizationUk()}/roles/${id}`,
         (data, status) => {
             data.forEach(e => {
                 content.append(`<p>${e.name}</p>`);
@@ -24,7 +24,7 @@ $("#userDetailsModal").on("show.bs.modal", function(e) {
     let id = $(e.relatedTarget).data("id");
     userData = users.filter(i => id == i.id)[0];
 
-    console.log(userData);
+    console.log(">>>", userData);
     $("#userDetailsModal .modal-header h4").text(
         `${userData.first_name} ${userData.last_name}`
     );

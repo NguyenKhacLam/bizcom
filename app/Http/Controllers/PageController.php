@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Role;
+use App\Models\User;
 
 class PageController extends Controller
 {
@@ -11,8 +14,10 @@ class PageController extends Controller
         $this->middleware('auth');
     }
 
-    public function dashboard(){
-        return view('pages.dashboard')->with('page_title', 'Trang chủ');
+    public function me(){
+        $user = Auth::user();
+        $role = $user->getRoleNames();
+        return view('auth.me')->with('page_title', 'Tài khoản của tôi')->with('user', $user)->with('role_name', $role);
     }
 
     // Organization

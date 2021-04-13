@@ -4,7 +4,7 @@
     <div class="card">
         <h5 class="card-header">Tạo tổ chức mới</h5>
         <div class="card-body">
-            <form action="{{url('/organization'.'/'.$organization->uk)}}" method="POST" enctype="multipart/form-data">
+            <form action="{{route('organizations.edit', $organization->uk)}}" method="POST" enctype="multipart/form-data">
                 @method('PUT')
                 @csrf
                 <input type="hidden" name="id" value="{{ $organization->id }}">
@@ -105,7 +105,7 @@
                     </div>
                     <div class="col-md-12 form-group">
                         <label for="desc">Mô tả</label>
-                        <textarea class="form-control @error('desc') is-invalid @enderror" name="desc" id="desc" rows="3" value="{{$organization->desc}}"></textarea>
+                        <textarea class="form-control @error('desc') is-invalid @enderror" name="desc" id="desc" rows="3">{{$organization->desc}}</textarea>
 
                         @error('desc')
                             <span class="invalid-feedback" role="alert">

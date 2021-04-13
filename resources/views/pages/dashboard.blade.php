@@ -30,7 +30,7 @@
                 <div class="d-flex justify-content-between">
                     <h2>Chọn tổ chức</h2>
                     @can('create organization')
-                        <a href="{{url('/organization/create')}}" class="btn btn-space btn-primary">Tạo<i class="fa fa-fw fa-plus" aria-hidden="true"></i></a>
+                        <a href="{{route('organizations.create_form')}}" class="btn btn-space btn-primary">Tạo<i class="fa fa-fw fa-plus" aria-hidden="true"></i></a>
                     @endcan
                 </div>
                 <div class="row">
@@ -47,7 +47,7 @@
                                 <div class="card-body">
                                     <h3 class="card-title">{{$organization->name}}</h3>
                                     <p class="card-text">{{$organization->desc}}</p>
-                                    <a href="{{url('/organization'.'/'.$organization->uk)}}" class="btn btn-primary">Go somewhere</a>
+                                    <a href="{{route('organizations.single', $organization->uk)}}" class="btn btn-primary">Go somewhere</a>
                                 </div>
                             </div>
                         </div>
