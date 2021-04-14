@@ -31,11 +31,13 @@ Route::middleware(['auth'])->group(function () {
 
         // User
         Route::get('/{uk}/users', [UserController::class, 'index'])->name('organizations.users');
+        Route::get('/users/{user_id}/edit', [UserController::class, 'edit'])->name('organizations.users.edit_form');
         Route::put('/users/{user_id?}', [UserController::class, 'update'])->name('organizations.users.edit');
+        Route::delete('/users/{user_id?}', [UserController::class, 'destroy'])->name('organizations.users.delete');
 
         // Roles
         Route::get('/{uk}/roles', [RoleController::class, 'index'])->name('organizations.roles');
-        Route::get('/{uk}/roles/{role_id?}', [RoleController::class, 'show'])->name('organizations.single');
+        Route::get('/{uk}/roles/{role_id?}', [RoleController::class, 'show'])->name('organizations.roles.single');
     });
 });
 

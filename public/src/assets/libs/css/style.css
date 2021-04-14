@@ -7080,3 +7080,13 @@ Media Query
 /* Custom, iPhone Retina */
 @media only screen and (max-width: 320px) {
 }
+
+/* Custom css */
+.tag {
+    background-color: #b6e3da;
+    padding: 5px;
+}
+
+.tag-yellow {
+    background-color: #f0fab1;
+}

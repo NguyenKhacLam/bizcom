@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Validator;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -16,6 +17,19 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
+        foreach ($users as $user) {
+            $organization = DB::table('users')
+                ->join('organization_user', 'organization_user.user_id', '=', 'users.id')
+                ->join('organizations', 'organization_user.organization_id', '=', 'organizations.id')
+                ->where('users.id', '=', $user->id)
+                ->where('organizations.parent_id', '=', null)
+                ->select('organizations.short_name')
+                ->get();
+            $roles = $user->getRoleNames();
+
+            $user->organization = $organization;
+            $user->roles = $roles;
+        }
         return view('pages.users.index')->with('page_title', 'Nhân viên')->with('users', $users);
     }
 
@@ -59,7 +73,20 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        return view('auth.me')->with('page_title', 'Tài khoản của tôi');
+        $user = User::find($id);
+        $organization = DB::table('users')
+            ->join('organization_user', 'organization_user.user_id', '=', 'users.id')
+            ->join('organizations', 'organization_user.organization_id', '=', 'organizations.id')
+            ->where('users.id', '=', $user->id)
+            ->where('organizations.parent_id', '=', null)
+            ->select('organizations.short_name')
+            ->get();
+        $roles = $user->getRoleNames();
+
+        $user->organization = $organization;
+        $user->roles = $roles;
+
+        return view('pages.users.edit')->with('page_title', 'Thông tin người dùng')->with('user', $user);
     }
 
     /**
@@ -117,6 +144,10 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::find($id);
+        $user->status = 'BLOCKED';
+        $user->save();
+
+        return "OK";
     }
 }

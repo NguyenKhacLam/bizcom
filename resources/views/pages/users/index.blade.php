@@ -25,7 +25,28 @@
                                 </tr>
                             </thead>
                             <tbody>
-
+                                @foreach ($users as $user)
+                                    <tr>
+                                        <th>{{$user->first_name}} {{$user->last_name}}</th>
+                                        <th>
+                                            <?php foreach ($user->roles as $item) {?>
+                                                <span class="tag tag-yellow">{{$item}}</span>
+                                            <?php }?>
+                                        </th>
+                                        <th>
+                                            <?php foreach ($user->organization as $item) {?>
+                                                <a href="" class="tag">{{$item->short_name}}</a>
+                                            <?php }?>
+                                        </th>
+                                        <th>{{date("d-m-Y", strtotime($user->dob))}}</th>
+                                        <th>{{date("d-m-Y", strtotime($user->created_at))}}</th>
+                                        <th>{{$user->status}}</th>
+                                        <th style="display: flex">
+                                            <a href="{{route('organizations.users.edit_form', $user->id)}}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                                            <button class="btn btn-danger" data-userid="{{$user->id}}"}><i class="fas fa-trash"></i></button>
+                                        </th>
+                                    </tr>
+                                @endforeach
                             </tbody>
                             <tfoot>
                                 <tr>
