@@ -25,8 +25,9 @@ class CreateUsersTable extends Migration
             $table->timestamp('phone_verified_at')->nullable();
             $table->string('password');
             $table->datetime('dob');
+            $table->string('company')->nullable();
             $table->integer('gender')->default(0);
-            $table->string('address');
+            $table->string('address')->nullable();
             $table->enum('status', ['INIT','ACTIVED','BLOCKED'])->default('INIT');
             $table->string('avatar')->default('no_image.jpg');
             $table->rememberToken();

@@ -19,7 +19,7 @@ class CreateOrganizationsTable extends Migration
             $table->integer('parent_id')->nullable();
             $table->string('name');
             $table->string('short_name');
-            $table->string('description');
+            $table->text('description');
             $table->string('address');
             $table->string('email');
             $table->string('phone');
