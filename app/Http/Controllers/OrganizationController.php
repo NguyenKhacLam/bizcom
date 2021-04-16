@@ -26,11 +26,11 @@ class OrganizationController extends Controller
         $user = Auth::user();
         $organizations =
             DB::table('users')
-            ->join('organization_user', 'organization_user.user_id', '=', 'users.id')
-            ->join('organizations', 'organization_user.organization_id', '=', 'organizations.id')
+            ->join('user_organization', 'user_organization.user_id', '=', 'users.id')
+            ->join('organizations', 'user_organization.organization_id', '=', 'organizations.id')
             ->where('users.id', '=', $user->id)
             ->whereNull('organizations.parent_id')
-            ->select('organizations.id', 'organizations.uk', 'organizations.name', 'organizations.short_name', 'organizations.desc', 'organizations.avatar', 'organizations.banner')
+            ->select('organizations.id', 'organizations.uk', 'organizations.name', 'organizations.short_name', 'organizations.description', 'organizations.avatar', 'organizations.banner')
             ->get();
         return view('pages.dashboard')->with('page_title', 'Trang chủ')->with('organizations', $organizations);
     }
@@ -56,10 +56,10 @@ class OrganizationController extends Controller
         $user = Auth::user();
         $organizations =
             DB::table('users')
-            ->join('organization_user', 'organization_user.user_id', '=', 'users.id')
-            ->join('organizations', 'organization_user.organization_id', '=', 'organizations.id')
+            ->join('user_organization', 'user_organization.user_id', '=', 'users.id')
+            ->join('organizations', 'user_organization.organization_id', '=', 'organizations.id')
             ->where('users.id', '=', $user->id)
-            ->select('organizations.id', 'organizations.uk', 'organizations.name', 'organizations.short_name', 'organizations.desc', 'organizations.avatar', 'organizations.banner')
+            ->select('organizations.id', 'organizations.uk', 'organizations.name', 'organizations.short_name', 'organizations.description', 'organizations.avatar', 'organizations.banner')
             ->get();
 
         return view('pages.organization.create')->with('organizations', $organizations);
@@ -82,7 +82,7 @@ class OrganizationController extends Controller
             'address' => 'required',
             'rep_by' => 'required|string',
             'business' => 'required|string',
-            'desc' => 'required|string',
+            'description' => 'required|string',
             // 'avatar' => 'image|mimes:jpeg,png,jpg,gif,svg',
             // 'banner' => 'image|mimes:jpeg,png,jpg,gif,svg'
         ]);
@@ -104,7 +104,7 @@ class OrganizationController extends Controller
         $organization->address = $request->input('address');
         $organization->rep_by = $request->input('rep_by');
         $organization->business = $request->input('business');
-        $organization->desc = $request->input('desc');
+        $organization->description = $request->input('description');
         $organization->parent_id = $request->input('parent_id');
         $organization->status = 'INIT';
         $organization->enable = 1;
@@ -124,14 +124,14 @@ class OrganizationController extends Controller
             }
         }
 
-        // Save to organization_user
+        // Save to user_organization
         $organization->save();
 
-        $organization_user = new OrganizationUser();
-        $organization_user->user_id = Auth::user()->id;
-        $organization_user->organization_id = $organization->id;
+        $user_organization = new OrganizationUser();
+        $user_organization->user_id = Auth::user()->id;
+        $user_organization->organization_id = $organization->id;
 
-        $organization_user->save();
+        $user_organization->save();
 
         return redirect('/');
     }
@@ -159,10 +159,10 @@ class OrganizationController extends Controller
         $user = Auth::user();
         $organizations =
             DB::table('users')
-            ->join('organization_user', 'organization_user.user_id', '=', 'users.id')
-            ->join('organizations', 'organization_user.organization_id', '=', 'organizations.id')
+            ->join('user_organization', 'user_organization.user_id', '=', 'users.id')
+            ->join('organizations', 'user_organization.organization_id', '=', 'organizations.id')
             ->where('users.id', '=', $user->id)
-            ->select('organizations.id', 'organizations.uk', 'organizations.name', 'organizations.short_name', 'organizations.desc', 'organizations.avatar', 'organizations.banner')
+            ->select('organizations.id', 'organizations.uk', 'organizations.name', 'organizations.short_name', 'organizations.description', 'organizations.avatar', 'organizations.banner')
             ->get();
 
         $organization = DB::table('organizations')->where('uk','=', $uk)->first();
@@ -187,7 +187,7 @@ class OrganizationController extends Controller
             'address' => 'required',
             'rep_by' => 'required|string',
             'business' => 'required|string',
-            'desc' => 'required|string',
+            'description' => 'required|string',
             // 'avatar' => 'image|mimes:jpeg,png,jpg,gif,svg',
             // 'banner' => 'image|mimes:jpeg,png,jpg,gif,svg'
         ]);
@@ -200,7 +200,7 @@ class OrganizationController extends Controller
 
         $request->input('name') && $organization->name = $request->input('name');
         $request->input('short_name') && $organization->short_name = $request->input('short_name');
-        $request->input('desc') && $organization->desc = $request->input('desc');
+        $request->input('description') && $organization->description = $request->input('description');
         $request->input('address') && $organization->address = $request->input('address');
         $request->input('phone') && $organization->phone = $request->input('phone');
         $request->input('email') && $organization->email = $request->input('email');
