@@ -46,7 +46,7 @@
                                 <img class="card-img-top img-fluid" src="uploads/{{$organization->banner}}" alt="Card image cap">
                                 <div class="card-body">
                                     <h3 class="card-title">{{$organization->name}}</h3>
-                                    <p class="card-text">{{$organization->desc}}</p>
+                                    <p class="card-text">{{$organization->description}}</p>
                                     <a href="{{route('organizations.single', $organization->uk)}}" class="btn btn-primary">Go somewhere</a>
                                 </div>
                             </div>

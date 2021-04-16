@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class OrganizationSeeder extends Seeder
 {
@@ -22,11 +25,10 @@ class OrganizationSeeder extends Seeder
             'address' => 'Hanoi',
             'website' => 'www.thanhnienkhoinghiep.com',
             'phone' => '0123456789',
-            'founding' => date('d-m-Y', '01-09-2010'),
+            'founding' => Carbon::createFromDate(2001, 9, 24, 7),
             'rep_by' => 'Tran Thanh Huy',
             'fields' => 'Tình nguyện, Giáo dục',
             'status' => 'ACTIVED',
-            'type' => 0
         ]);
 
         DB::table('organizations')->insert([
@@ -37,11 +39,10 @@ class OrganizationSeeder extends Seeder
             'email' => 'Cit@gmail.com',
             'address' => 'Hanoi',
             'phone' => '0123456789',
-            'founding' => date('d-m-Y', '01-09-2010'),
+            'founding' => Carbon::createFromDate(2010, 9, 24, 7),
             'rep_by' => 'Tran Thanh Huy',
             'fields' => 'Tình nguyện, Giáo dục',
             'status' => 'ACTIVED',
-            'type' => 0
         ]);
 
         DB::table('user_organization')->insert([

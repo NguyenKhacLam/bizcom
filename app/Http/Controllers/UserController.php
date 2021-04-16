@@ -19,8 +19,8 @@ class UserController extends Controller
         $users = User::all();
         foreach ($users as $user) {
             $organization = DB::table('users')
-                ->join('organization_user', 'organization_user.user_id', '=', 'users.id')
-                ->join('organizations', 'organization_user.organization_id', '=', 'organizations.id')
+                ->join('user_organization', 'user_organization.user_id', '=', 'users.id')
+                ->join('organizations', 'user_organization.organization_id', '=', 'organizations.id')
                 ->where('users.id', '=', $user->id)
                 ->where('organizations.parent_id', '=', null)
                 ->select('organizations.short_name')
@@ -75,8 +75,8 @@ class UserController extends Controller
     {
         $user = User::find($id);
         $organization = DB::table('users')
-            ->join('organization_user', 'organization_user.user_id', '=', 'users.id')
-            ->join('organizations', 'organization_user.organization_id', '=', 'organizations.id')
+            ->join('user_organization', 'user_organization.user_id', '=', 'users.id')
+            ->join('organizations', 'user_organization.organization_id', '=', 'organizations.id')
             ->where('users.id', '=', $user->id)
             ->where('organizations.parent_id', '=', null)
             ->select('organizations.short_name')
