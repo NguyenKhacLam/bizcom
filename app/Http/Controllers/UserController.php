@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Validator;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
@@ -60,9 +61,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($user_id)
     {
-        //
+        dd($user_id);
     }
 
     /**
@@ -86,7 +87,9 @@ class UserController extends Controller
         $user->organization = $organization;
         $user->roles = $roles;
 
-        return view('pages.users.edit')->with('page_title', 'Thông tin người dùng')->with('user', $user);
+        $available_role =  DB::table('roles')->get();
+
+        return view('pages.users.edit')->with('page_title', 'Thông tin người dùng')->with('user', $user)->with('roles', $available_role);
     }
 
     /**
@@ -134,6 +137,15 @@ class UserController extends Controller
         $user->save();
 
         return redirect('/me');
+    }
+
+    public function changeRole(Request $request, $user_id)
+    {
+        $user = User::where('id','=', $user_id)->first();
+        // dd($user->getRoleNames());
+        $user->syncRoles($request->input('roles'));
+
+        return redirect('organizations/users/'.$user_id.'/edit');
     }
 
     /**

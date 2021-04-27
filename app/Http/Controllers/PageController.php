@@ -16,8 +16,9 @@ class PageController extends Controller
 
     public function me(){
         $user = Auth::user();
-        $role = $user->getRoleNames();
-        return view('auth.me')->with('page_title', 'Tài khoản của tôi')->with('user', $user)->with('role_name', $role);
+        $roles = $user->getRoleNames();
+
+        return view('auth.me')->with('page_title', 'Tài khoản của tôi')->with('user', $user)->with('role_name', $roles);
     }
 
     // Organization

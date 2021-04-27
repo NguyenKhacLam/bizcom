@@ -3,12 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 
-class RoleController extends Controller
+class BillController extends Controller
 {
     public function __construct()
     {
@@ -19,15 +15,9 @@ class RoleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($uk)
+    public function index()
     {
-        $user = Auth::user();
-        $roles =
-            DB::table('roles')
-            ->select('roles.id', 'roles.name', 'roles.created_at', 'roles.updated_at')
-            ->get();
-
-        return view('pages.roles.index')->with('page_title', 'Chức vụ')->with('roles', $roles);
+        return view('pages.bills.index')->with('page_title', 'Hóa đơn');
     }
 
     /**
@@ -37,7 +27,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.bills.create')->with('page_title', 'Tạo hóa đơn');
     }
 
     /**
@@ -57,17 +47,9 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($uk, $role_id)
+    public function show($id)
     {
-        $permission =
-            DB::table('roles')
-            ->join("role_has_permissions", "role_has_permissions.role_id", '=', "roles.id")
-            ->join("permissions", "role_has_permissions.permission_id", '=', "permissions.id")
-            ->select('permissions.id', 'permissions.name')
-            ->where('roles.id', '=', $role_id)
-            ->get();
-
-        return response()->json($permission);
+        return view('pages.bills.single')->with('page_title', 'Chi tiết hóa đơn');
     }
 
     /**
@@ -78,7 +60,7 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('pages.bills.update')->with('page_title', 'Sửa hóa đơn');
     }
 
     /**

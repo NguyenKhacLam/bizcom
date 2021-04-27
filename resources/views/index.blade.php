@@ -116,6 +116,8 @@
     <script src="src/assets/libs/js/alert.js"></script>
     <script src="src/assets/libs/js/modal.js"></script>
     <script src="src/assets/libs/js/dataTable.js"></script>
+    <script src="src/assets/libs/js/utils/utils.js"></script>
+    @yield('optionaljs')
 </body>
 
 </html>

@@ -75,10 +75,10 @@
                         @enderror
                     </div>
                     <div class="col-md-4 form-group">
-                        <label for="business">Ngành nghề</label>
-                        <input id="business" name="business" type="text" placeholder="Ngành nghề" class="form-control @error('business') is-invalid @enderror" value="{{$organization->business}}">
+                        <label for="fields">Ngành nghề</label>
+                        <input id="fields" name="fields" type="text" placeholder="Ngành nghề" class="form-control @error('fields') is-invalid @enderror" value="{{$organization->fields}}">
 
-                        @error('business')
+                        @error('fields')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
@@ -104,10 +104,10 @@
                         @enderror
                     </div>
                     <div class="col-md-12 form-group">
-                        <label for="desc">Mô tả</label>
-                        <textarea class="form-control @error('desc') is-invalid @enderror" name="desc" id="desc" rows="3">{{$organization->desc}}</textarea>
+                        <label for="description">Mô tả</label>
+                        <textarea class="form-control @error('description') is-invalid @enderror" name="description" id="description" rows="3">{{$organization->description}}</textarea>
 
-                        @error('desc')
+                        @error('description')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>

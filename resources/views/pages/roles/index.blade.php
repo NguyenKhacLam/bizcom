@@ -30,7 +30,7 @@
                                         <td>{{$item->name}}</td>
                                         <td>{{$item->created_at}}</td>
                                         <td>
-                                            <button data-id="{{$item->id}}" data-name="{{$item->name}}" class="btn-edit-role btn btn-success" data-toggle="modal" data-target="#editForm">Sửa</button>
+                                            <button class="btn-edit-role btn btn-success">Xem</button>
                                             <button class="btn btn-danger">Xóa</button>
                                         </td>
                                     </tr>
@@ -41,28 +41,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div class="modal" id="editForm">
-        <div class="modal-dialog">
-          <div class="modal-content">
-
-            <div class="modal-header">
-              <h4 class="modal-title">Modal Heading</h4>
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-
-            <div class="modal-body">
-                <div class="content"></div>
-            </div>
-
-            <div class="modal-footer">
-              <button type="button" class="btn btn-primary" data-dismiss="modal">Update</button>
-              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
-
-          </div>
         </div>
     </div>
 @endsection

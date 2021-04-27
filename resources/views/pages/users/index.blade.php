@@ -42,7 +42,9 @@
                                         <th>{{date("d-m-Y", strtotime($user->created_at))}}</th>
                                         <th>{{$user->status}}</th>
                                         <th style="display: flex">
-                                            <a href="{{route('organizations.users.edit_form', $user->id)}}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                                            @can('edit_user')
+                                                <a href="{{route('organizations.users.edit_form', $user->id)}}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                                            @endcan
                                             <button class="btn btn-danger" data-userid="{{$user->id}}"}><i class="fas fa-trash"></i></button>
                                         </th>
                                     </tr>
