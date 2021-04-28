@@ -16,12 +16,18 @@ class CreateBillsTable extends Migration
         Schema::create('bills', function (Blueprint $table) {
             $table->id();
             $table->string('uk')->unique();
-            $table->string('name');
-            $table->string('for');
+            $table->enum('type', ['INCOME', 'EXPENSE']);
+            $table->string('description');
             $table->string('created_by');
-            $table->string('receiver');
-            $table->string('amount');
+            $table->unsignedBigInteger('receiver');
+            $table->unsignedBigInteger('sender');
+            $table->integer('tax');
+            $table->bigInteger('amount');
+            $table->bigInteger('total');
             $table->timestamps();
+
+            // $table->foreign('receiver')->references('id')->on('bill_persons')->onDelete('cascade');
+            // $table->foreign('sender')->references('id')->on('bill_persons')->onDelete('cascade');
         });
     }
 

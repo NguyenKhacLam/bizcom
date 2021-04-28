@@ -6,14 +6,14 @@
     @include('partials.page_header')
     <div class="card">
         <div class="card-body">
-            <form action="" id='createBillForm' method="POST">
+            <form action="" id='createBillForm'>
                 @csrf
                 <div class="row">
                     <div class="col-md-3 form-group">
                         <label for="type" class="col-form-label">Loại đơn</label>
                         <select name="type" id="" class="form-control">
-                            <option value="income">Doanh thu</option>
-                            <option value="expense">Chi phí</option>
+                            <option value="INCOME">Doanh thu</option>
+                            <option value="EXPENSE">Chi phí</option>
                         </select>
                     </div>
                     <div class="col-md-3 form-group">

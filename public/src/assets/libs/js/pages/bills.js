@@ -83,13 +83,17 @@ addItemForm.on("submit", e => {
 
 createBillForm.on("submit", e => {
     e.preventDefault();
+    const organization_id = getOrganizationUk();
     let data = createBillForm.serializeArray();
     let dataObject = {
+        organization_id,
         type: data[1].value,
         tax: data[2].value,
         description: data[3].value,
         createdBy: $("#created_by").val(),
         createdAt: $("#created_at").val(),
+        total,
+        amount: total - (total * taxRate) / 100,
         senderInfo: {
             name: data[4].value,
             sender_phone: data[5].value,
@@ -106,6 +110,17 @@ createBillForm.on("submit", e => {
     };
     console.log(dataObject);
     // Ajax call here
+    $.ajax({
+        url: "/organizations/bills",
+        type: "POST",
+        data: dataObject,
+        success: function(data) {
+            location.href = data.back_to;
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert("Đã xảy ra lỗi");
+        }
+    });
 });
 
 addItemRow(items);

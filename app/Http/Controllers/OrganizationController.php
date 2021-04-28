@@ -89,7 +89,6 @@ class OrganizationController extends Controller
 
         if($validator->fails()){
             $messages = $validator->messages();
-            dd($messages);
             return redirect('/organization/create')->withErrors($messages);
         }
 

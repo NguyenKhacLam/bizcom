@@ -47,6 +47,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{uk}/bills/create', [BillController::class, 'create'])->name('organizations.bills.create');
         Route::get('/{uk}/bills/{bill_id}/show', [BillController::class, 'show'])->name('organizations.bills.single');
         Route::get('/{uk}/bills/{bill_id}/edit', [BillController::class, 'edit'])->name('organizations.bills.edit');
+        Route::post('/bills', [BillController::class, 'store'])->name('organizations.bills.store');
     });
 });
 
