@@ -11,28 +11,28 @@
                     <div class="pt-2 d-inline-block">
                         <h4 class="text-success">Doanh thu</h4>
                     </div>
-                    <div class="float-right"> <h3 class="mb-0">Invoice #1</h3>
-                    Date: 3 Dec, 2020</div>
+                    <div class="float-right"> <h3 class="mb-0">Hóa đơn #{{$bill->id}}</h3>
+                    Ngày tạo: {{date("d-m-Y", strtotime($bill->created_at))}}</div>
                 </div>
                 <div class="card-body">
                     <div class="row mb-4">
                         <div class="col-sm-6">
                             <h5 class="mb-3">Người nộp:</h5>
-                            <h3 class="text-dark mb-1">Gerald A. Garcia</h3>
+                            <h3 class="text-dark mb-1">{{$bill->senderInfo->name}}</h3>
 
-                            <div>Tổ chức: <span class="font-weight-bold">HYS Thăng Long</span></div>
-                            <div>Email: info@gerald.com.pl</div>
-                            <div>SĐT: +573-282-9117</div>
+                            <div>Tổ chức: <span class="font-weight-bold">{{$bill->senderInfo->organization}}</span></div>
+                            <div>Email: {{$bill->senderInfo->email}}</div>
+                            <div>SĐT: +{{$bill->senderInfo->phone}}</div>
                         </div>
                         <div class="col-sm-6">
                             <h5 class="mb-3">Người nhận:</h5>
-                            <h3 class="text-dark mb-1">Anthony K. Friel</h3>
-                            <div>Tổ chức: <span class="font-weight-bold">CiT</span></div>
-                            <div>Email: info@anthonyk.com</div>
-                            <div>SĐT: +614-837-8483</div>
+                            <h3 class="text-dark mb-1">{{$bill->receiverInfo->name}}</h3>
+                            <div>Tổ chức: <span class="font-weight-bold">{{$bill->receiverInfo->organization}}</span></div>
+                            <div>Email: {{$bill->receiverInfo->email}}</div>
+                            <div>SĐT: +{{$bill->receiverInfo->phone}}</div>
                         </div>
                         <div class="col-sm-12 mt-2">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur, assumenda blanditiis deserunt fugiat, nesciunt, fuga repellendus maxime quos iusto atque enim. Maxime necessitatibus placeat nemo impedit optio nobis exercitationem in!</p>
+                            <p>{{$bill->description}}</p>
                         </div>
                     </div>
                     <div class="table-responsive-sm">
@@ -48,38 +48,22 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="center">1</td>
-                                    <td class="left strong">Origin License</td>
-                                    <td class="left">Extended License</td>
-                                    <td class="right">$1500,00</td>
-                                    <td class="center">1</td>
-                                    <td class="right">$1500,00</td>
-                                </tr>
-                                <tr>
-                                    <td class="center">2</td>
-                                    <td class="left">Custom Services</td>
-                                    <td class="left">Instalation and Customization (cost per hour)</td>
-                                    <td class="right">$110,00</td>
-                                    <td class="center">20</td>
-                                    <td class="right">$22.000,00</td>
-                                </tr>
-                                <tr>
-                                    <td class="center">3</td>
-                                    <td class="left">Hosting</td>
-                                    <td class="left">1 year subcription</td>
-                                    <td class="right">$309,00</td>
-                                    <td class="center">1</td>
-                                    <td class="right">$309,00</td>
-                                </tr>
-                                <tr>
-                                    <td class="center">4</td>
-                                    <td class="left">Platinum Support</td>
-                                    <td class="left">1 year subcription 24/7</td>
-                                    <td class="right">$5.000,00</td>
-                                    <td class="center">1</td>
-                                    <td class="right">$5.000,00</td>
-                                </tr>
+                                @php
+                                    $i = 0;
+                                @endphp
+                                @foreach ($bill->itemsList as $item)
+                                    <tr>
+                                        <td class="center">{{$i + 1}}</td>
+                                        <td class="left strong">{{$item->name}}</td>
+                                        <td class="left">{{$item->short_desc}}</td>
+                                        <td class="right">{{number_format($item->unit_price)}}</td>
+                                        <td class="center">{{$item->quantity}}</td>
+                                        <td class="right">{{number_format($item->unit_price * $item->quantity)}}</td>
+                                    </tr>
+                                    @php
+                                        $i++;
+                                    @endphp
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -91,16 +75,16 @@
                                 <tbody>
                                     <tr>
                                         <td class="left">
-                                            <strong class="text-dark">VAT (10%)</strong>
+                                            <strong class="text-dark">VAT ({{$bill->tax}}%)</strong>
                                         </td>
-                                        <td class="right">$2,304,00</td>
+                                        <td class="right">{{number_format($bill->amount - $bill->amount)}}</td>
                                     </tr>
                                     <tr>
                                         <td class="left">
                                             <strong class="text-dark">Tổng</strong>
                                         </td>
                                         <td class="right">
-                                            <strong class="text-dark">$20,744,00</strong>
+                                            <strong class="text-dark">{{number_format($bill->total)}}</</strong>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -109,7 +93,7 @@
                     </div>
                 </div>
                 <div class="card-footer bg-white">
-                    <p class="mb-0">Tạo bởi <a href="#" class="text-danger">Nguyễn Khắc Lâm</a> - 22/04/2021</p>
+                    <p class="mb-0">Tạo bởi <a href="#" class="text-danger">{{$bill->created_by}}</a> - {{date("d-m-Y", strtotime($bill->created_at))}}</p>
                 </div>
             </div>
         </div>

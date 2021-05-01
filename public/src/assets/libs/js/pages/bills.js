@@ -5,6 +5,10 @@ const itemsList = $("#itemsList");
 
 let items = [];
 
+if (typeof itemsListDb !== "undefined") {
+    items = itemsListDb;
+}
+
 let total = 0;
 let taxRate = 0;
 
@@ -29,7 +33,17 @@ function deleteOrder(id) {
         buttons: true
     }).then(willDelete => {
         if (willDelete) {
-            console.log("delete");
+            $.ajax({
+                url: `/organizations/bills/${id}`,
+                type: "DELETE",
+                data: id,
+                success: function(data) {
+                    // location.reload();
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    console.error("FAIL");
+                }
+            });
         }
     });
 }
@@ -75,7 +89,11 @@ addItemForm.on("submit", e => {
     addItemRow(items);
     total += data[2].value * data[3].value;
 
-    $("#total").text(`${formatter.format(total + (total * taxRate) / 100)}`);
+    if (typeof totalDB !== "undefined") {
+        total += totalDB;
+    }
+    amount = total + (total * taxRate) / 100;
+    $("#total").text(`${formatter.format(amount)}`);
     $("#addItemModal").modal("hide");
 
     addItemForm.trigger("reset");
@@ -85,42 +103,64 @@ createBillForm.on("submit", e => {
     e.preventDefault();
     const organization_id = getOrganizationUk();
     let data = createBillForm.serializeArray();
+
     let dataObject = {
         organization_id,
         type: data[1].value,
         tax: data[2].value,
-        description: data[3].value,
+        title: data[3].value,
+        description: data[4].value,
         createdBy: $("#created_by").val(),
         createdAt: $("#created_at").val(),
         total,
         amount: total - (total * taxRate) / 100,
         senderInfo: {
-            name: data[4].value,
-            sender_phone: data[5].value,
-            sender_email: data[6].value,
-            sender_org: data[7].value
+            name: data[5].value,
+            sender_phone: data[6].value,
+            sender_email: data[7].value,
+            sender_org: data[8].value
         },
         receiverInfo: {
-            name: data[8].value,
-            receiver_phone: data[9].value,
-            receiver_email: data[10].value,
-            receiver_org: data[11].value
+            name: data[9].value,
+            receiver_phone: data[10].value,
+            receiver_email: data[11].value,
+            receiver_org: data[12].value
         },
         items
     };
-    console.log(dataObject);
+
     // Ajax call here
-    $.ajax({
-        url: "/organizations/bills",
-        type: "POST",
-        data: dataObject,
-        success: function(data) {
-            location.href = data.back_to;
-        },
-        error: function(xhr, ajaxOptions, thrownError) {
-            alert("Đã xảy ra lỗi");
-        }
-    });
+    if (typeof itemsListDb !== "undefined" && typeof bill_id !== "undefined") {
+        $.ajax({
+            url: `/organizations/bills/${bill_id}`,
+            type: "PUT",
+            data: { ...dataObject, id: bill_id },
+            success: function(data) {
+                location.reload();
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                alert("Đã xảy ra lỗi");
+            }
+        });
+    } else {
+        $.ajax({
+            url: "/organizations/bills",
+            type: "POST",
+            data: dataObject,
+            success: function(data) {
+                location.href = data.back_to;
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                alert("Đã xảy ra lỗi");
+            }
+        });
+    }
 });
 
-addItemRow(items);
+if (typeof itemsListDb !== "undefined") {
+    addItemRow(itemsListDb);
+    $("#taxRate").text(`${taxDB}%`);
+    $("#total").text(`${formatter.format(totalDB)}`);
+} else {
+    addItemRow(items);
+}

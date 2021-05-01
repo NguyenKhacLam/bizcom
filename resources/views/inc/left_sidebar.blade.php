@@ -47,7 +47,7 @@
                         <a class="nav-link" href="#" ><i class="fas fa-fw fa-compass"></i> Chiến dịch </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('organizations.bills', 'HYS')}}" ><i class="fas fa-fw fa-money-bill-alt"></i>Hóa đơn </a>
+                        <a class="nav-link" href="{{route('organizations.bills', getOrganizationParams())}}" ><i class="fas fa-fw fa-money-bill-alt"></i>Hóa đơn </a>
                     </li>
 
                     <li class="nav-divider">

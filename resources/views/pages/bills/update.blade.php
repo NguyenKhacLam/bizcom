@@ -8,18 +8,17 @@
         <div class="card-body">
             <form action="" id='createBillForm' method="POST">
                 @csrf
-                @method('PUT')
                 <div class="row">
                     <div class="col-md-3 form-group">
                         <label for="type" class="col-form-label">Loại đơn</label>
                         <select name="type" id="" class="form-control">
-                            <option value="income">Doanh thu</option>
-                            <option value="expense">Chi phí</option>
+                            <option value="INCOME" @if($bill->type == 'INCOME') selected @endif>Doanh thu</option>
+                            <option value="EXPENSE" @if($bill->type == 'EXPENSE') selected @endif>Chi phí</option>
                         </select>
                     </div>
                     <div class="col-md-3 form-group">
                         <label for="tax" class="col-form-label">Thuế</label>
-                        <input id="tax" name="tax" max="50" type="number" class="form-control @error('tax') is-invalid @enderror" placeholder="Thuế" value=0>
+                        <input id="tax" name="tax" max="50" type="number" class="form-control @error('tax') is-invalid @enderror" placeholder="Thuế" value="{{$bill->tax}}">
 
                         @error('tax')
                             <span class="invalid-feedback" role="alert">
@@ -29,7 +28,7 @@
                     </div>
                     <div class="col-md-3 form-group">
                         <label for="created_by" class="col-form-label">Người tạo</label>
-                        <input id="created_by" name="created_by" type="text" class="form-control @error('created_by') is-invalid @enderror" placeholder="Người tạo" disabled value="{{auth()->user()->username}}">
+                        <input id="created_by" name="created_by" type="text" class="form-control @error('created_by') is-invalid @enderror" placeholder="Người tạo" disabled value="{{$bill->created_by}}">
 
                         @error('created_by')
                             <span class="invalid-feedback" role="alert">
@@ -39,7 +38,7 @@
                     </div>
                     <div class="col-md-3 form-group">
                         <label for="created_at" class="col-form-label">Ngày tạo</label>
-                        <input id="created_at" name="created_at" type="date" placeholder="Ngày thành lập" class="form-control @error('created_at') is-invalid @enderror" disabled value="{{date("Y-m-d")}}">
+                        <input id="created_at" name="created_at" type="date" placeholder="Ngày thành lập" class="form-control @error('created_at') is-invalid @enderror" disabled value="{{date("Y-m-d"), strtotime($bill->created_at)}}">
 
                         @error('created_at')
                             <span class="invalid-feedback" role="alert">
@@ -48,8 +47,18 @@
                         @enderror
                     </div>
                     <div class="col-md-12 form-group">
+                        <label for="description">Tiêu đề</label>
+                        <input class="form-control @error('title') is-invalid @enderror" name="title" id="title" value="{{$bill->title}}"/>
+
+                        @error('title')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="col-md-12 form-group">
                         <label for="description">Mô tả</label>
-                        <textarea class="form-control @error('description') is-invalid @enderror" name="description" id="description" rows="3"></textarea>
+                        <textarea class="form-control @error('description') is-invalid @enderror" name="description" id="description" rows="3">{{$bill->description}}</textarea>
 
                         @error('description')
                             <span class="invalid-feedback" role="alert">
@@ -61,31 +70,31 @@
                         <h5>Người nộp</h5>
 
                         <label for="sender" class="col-form-label">Tên</label>
-                        <input id="sender" name="sender" type="text" placeholder="Tên người nộp" class="form-control @error('sender') is-invalid @enderror">
+                        <input id="sender" name="sender" type="text" placeholder="Tên người nộp" class="form-control @error('sender') is-invalid @enderror" value="{{$bill->senderInfo->name}}">
 
                         <label for="sender_phone" class="col-form-label">SĐT</label>
-                        <input id="sender_phone" name="sender_phone" type="text" placeholder="Sđt người nộp" class="form-control @error('sender_phone') is-invalid @enderror">
+                        <input id="sender_phone" name="sender_phone" type="text" placeholder="Sđt người nộp" class="form-control @error('sender_phone') is-invalid @enderror" value="{{$bill->senderInfo->phone}}">
 
                         <label for="sender_email" class="col-form-label">Email</label>
-                        <input id="sender_email" name="sender_email" type="text" placeholder="Email người nộp" class="form-control @error('sender_email') is-invalid @enderror">
+                        <input id="sender_email" name="sender_email" type="text" placeholder="Email người nộp" class="form-control @error('sender_email') is-invalid @enderror" value="{{$bill->senderInfo->email}}">
 
                         <label for="sender_org" class="col-form-label">Tổ chức</label>
-                        <input id="sender_org" name="sender_org" type="text" placeholder="Tổ chức người nộp" class="form-control @error('sender_org') is-invalid @enderror">
+                        <input id="sender_org" name="sender_org" type="text" placeholder="Tổ chức người nộp" class="form-control @error('sender_org') is-invalid @enderror" value="{{$bill->senderInfo->organization}}">
                     </div>
                     <div class="col-md-6">
                         <h5>Người nhận</h5>
 
                         <label for="receiver" class="col-form-label">Tên</label>
-                        <input id="receiver" name="receiver" type="text" placeholder="Tên người nhận" class="form-control @error('receiver') is-invalid @enderror">
+                        <input id="receiver" name="receiver" type="text" placeholder="Tên người nhận" class="form-control @error('receiver') is-invalid @enderror" value="{{$bill->receiverInfo->name}}">
 
                         <label for="receiver_phone" class="col-form-label">SĐT</label>
-                        <input id="receiver_phone" name="receiver_phone" type="text" placeholder="Sđt người nhận" class="form-control @error('receiver_phone') is-invalid @enderror">
+                        <input id="receiver_phone" name="receiver_phone" type="text" placeholder="Sđt người nhận" class="form-control @error('receiver_phone') is-invalid @enderror" value="{{$bill->receiverInfo->phone}}">
 
                         <label for="receiver_email" class="col-form-label">Email</label>
-                        <input id="receiver_email" name="receiver_email" type="text" placeholder="Email người nhận" class="form-control @error('receiver_email') is-invalid @enderror">
+                        <input id="receiver_email" name="receiver_email" type="text" placeholder="Email người nhận" class="form-control @error('receiver_email') is-invalid @enderror" value="{{$bill->receiverInfo->email}}">
 
                         <label for="receiver_org" class="col-form-label">Tổ chức</label>
-                        <input id="receiver_org" name="receiver_org" type="text" placeholder="Tổ chức người nhận" class="form-control @error('receiver_org') is-invalid @enderror">
+                        <input id="receiver_org" name="receiver_org" type="text" placeholder="Tổ chức người nhận" class="form-control @error('receiver_org') is-invalid @enderror" value="{{$bill->receiverInfo->organization}}">
                     </div>
 
                     <div class="col-md-12 mt-3">
@@ -181,5 +190,11 @@
         </div>
 @endsection
 @section('optionaljs')
+    <script>
+        const bill_id = <?php echo $bill->id?>;
+        const taxDB = <?php echo $bill->tax?>;
+        const totalDB = <?php echo $bill->total?>;
+        let itemsListDb = <?php echo $bill->itemsList?>;
+    </script>
     <script src="src/assets/libs/js/pages/bills.js"></script>
 @endsection

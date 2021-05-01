@@ -7,7 +7,7 @@
                 <div class="card-body">
                     <div class="d-inline-block">
                         <h5 class="text-muted">Doanh thu</h5>
-                        <h2 class="mb-0">$149.00</h2>
+                        <h2 class="mb-0">{{number_format($income)}} vnd</h2>
                     </div>
                     <div class="float-right icon-circle-medium  icon-box-lg  bg-brand-light mt-1">
                         <i class="fa fa-money-bill-alt fa-fw fa-sm text-brand"></i>
@@ -20,7 +20,7 @@
                 <div class="card-body">
                     <div class="d-inline-block">
                         <h5 class="text-muted">Chi phí</h5>
-                        <h2 class="mb-0">$149.00</h2>
+                        <h2 class="mb-0">{{number_format($expense)}} vnd</h2>
                     </div>
                     <div class="float-right icon-circle-medium icon-box-lg  bg-danger-light mt-1">
                         <i class="fa fa-money-bill-alt fa-fw fa-sm text-danger"></i>
@@ -33,7 +33,7 @@
                 <div class="card-body">
                     <div class="d-inline-block">
                         <h5 class="text-muted">Lợi nhuận</h5>
-                        <h2 class="mb-0">$149.00</h2>
+                        <h2 class="mb-0">{{number_format($revenue)}} vnd</h2>
                     </div>
                     <div class="float-right icon-circle-medium icon-box-lg  bg-success-light mt-1">
                         <i class="fa fa-money-bill-alt fa-fw fa-sm text-success"></i>
@@ -41,14 +41,14 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        {{-- <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="card">
                 <h5 class="card-header">Hóa đơn</h5>
                 <div class="card-body">
                     <canvas id="chartjs_bar"></canvas>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="card">
                 <h5 class="card-header">
@@ -72,41 +72,38 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @php
-                                    $title_arr = array("Đóng tiền học", "Mua dụng cụ", "Kinh phí sự kiện", "Đóng tiên sự kiện");
-                                    $desc_arr = array("Nguyễn Văn A đóng tiền", "Nguyễn Văn A Mua dụng cụ", "Nguyễn Văn A Kinh phí sự kiện", "Nguyễn Văn A đóng tiên sự kiện");
-                                    $price_arr = array(-2000000, -3000000, 50000000, 7000000)
-                                @endphp
 
-                                @for ($i = 0; $i < 100; $i++)
+                                @php
+                                    $i = 0;
+                                @endphp
+                                @foreach ($bills as $bill)
                                     <tr>
                                         <td>{{$i + 1}}</td>
                                         <td>
-                                            @php
-                                                $random_title_keys=array_rand($title_arr,3);
-                                            @endphp
-                                            {{$title_arr[$random_title_keys[1]]}}
+                                            {{$bill->title}}
                                         </td>
                                         <td>
-                                            @php
-                                                $random_desc_keys=array_rand($desc_arr,3);
-                                            @endphp
-                                            {{$desc_arr[$random_desc_keys[0]]}}
+                                            {{$bill->description}}
                                         </td>
-                                        @php
-                                            $random_price_keys=array_rand($price_arr,3);
-                                            $price = $price_arr[$random_price_keys[1]];
-                                        @endphp
-                                        <td class="@if($price > 0) text-success @else text-danger @endif">{{number_format($price)}}</td>
-                                        <td>2011/04/25</td>
-                                        <td>Nguyễn Khắc Lâm</td>
+                                        <td class="@if($bill->type == 'INCOME') text-success @else text-danger @endif">
+                                            @if($bill->type == 'INCOME') + @else - @endif
+                                            {{number_format($bill->total)}}
+                                        </td>
                                         <td>
-                                            <a href="{{route('organizations.bills.single', ['HYS', 'sadh'])}}" class="btn btn-primary">Xem</a>
-                                            <a href="{{route('organizations.bills.edit', ['HYS', 'sadh'])}}" class="btn btn-success">Sửa</a>
-                                            <button class="btn btn-danger" onClick="deleteOrder(1)">Hủy</button>
+                                            {{date("d-m-Y", strtotime($bill->created_at))}}
+                                        </td>
+                                        <td>{{$bill->created_by}}</td>
+                                        <td>
+                                            <a href="{{route('organizations.bills.single', [$bill->organization_id, $bill->id])}}" class="btn btn-primary">Xem</a>
+                                            <a href="{{route('organizations.bills.edit', [$bill->organization_id, $bill->id])}}" class="btn btn-success">Sửa</a>
+                                            <button class="btn btn-danger" onClick="deleteOrder({{$bill->id}})">Hủy</button>
                                         </td>
                                     </tr>
-                                @endfor
+                                    @php
+                                        $i++;
+                                    @endphp
+                                    @endforeach
+
                             </tbody>
                             <tfoot>
                                 <tr>

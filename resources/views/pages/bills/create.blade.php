@@ -47,6 +47,16 @@
                         @enderror
                     </div>
                     <div class="col-md-12 form-group">
+                        <label for="description">Tiêu đề</label>
+                        <input class="form-control @error('title') is-invalid @enderror" name="title" id="title"/>
+
+                        @error('title')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="col-md-12 form-group">
                         <label for="description">Mô tả</label>
                         <textarea class="form-control @error('description') is-invalid @enderror" name="description" id="description" rows="3"></textarea>
 

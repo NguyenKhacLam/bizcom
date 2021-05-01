@@ -48,6 +48,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{uk}/bills/{bill_id}/show', [BillController::class, 'show'])->name('organizations.bills.single');
         Route::get('/{uk}/bills/{bill_id}/edit', [BillController::class, 'edit'])->name('organizations.bills.edit');
         Route::post('/bills', [BillController::class, 'store'])->name('organizations.bills.store');
+        Route::put('/bills/{bill_id}', [BillController::class, 'update'])->name('organizations.bills.update');
+        Route::delete('/bills/{bill_id}', [BillController::class, 'destroy'])->name('organizations.bills.destroy');
     });
 });
 

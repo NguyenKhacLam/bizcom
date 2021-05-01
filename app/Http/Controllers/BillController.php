@@ -24,11 +24,32 @@ class BillController extends Controller
     {
         $bills = DB::table('bills')
                 ->where('organization_id', '=', $uk)
+                ->where('status', '!=', 'DELETED')
                 ->get();
+
+        foreach ($bills as $bill) {
+            $sender = DB::table('bill_persons')
+                ->join('bills', 'bills.sender', '=', 'bill_persons.id')
+                ->get();
+
+            $receiver = DB::table('bill_persons')
+                    ->join('bills', 'bills.receiver', '=', 'bill_persons.id')
+                    ->get();
+
+            $bill->senderInfo = $sender;
+            $bill->receiverInfo = $receiver;
+        }
+
+        $income = DB::table('bills')->where('type','=','INCOME')->sum('total');
+        $expense = DB::table('bills')->where('type','=','EXPENSE')->sum('total');
+        $revenue = $income - $expense;
 
         return view('pages.bills.index')
                 ->with('page_title', 'Hóa đơn')
-                ->with('bills', $bills);
+                ->with('bills', $bills)
+                ->with('income', $income)
+                ->with('expense', $expense)
+                ->with('revenue', $revenue);
     }
 
     /**
@@ -52,6 +73,7 @@ class BillController extends Controller
         $validator = Validator::make($request->all(), [
             'createdBy' => 'required',
             'type' => 'required',
+            'title' => 'required',
             'senderInfo' => 'required',
             'receiverInfo' => 'required',
             'items' => 'present|array'
@@ -82,6 +104,7 @@ class BillController extends Controller
         $bill = new Bill();
 
         $bill->type = $request->input('type');
+        $bill->title = $request->input('title');
         $bill->description = $request->input('description');
         $bill->created_by = $request->input('createdBy');
         $bill->tax = $request->input('tax');
@@ -118,7 +141,28 @@ class BillController extends Controller
      */
     public function show($id)
     {
-        return view('pages.bills.single')->with('page_title', 'Chi tiết hóa đơn');
+        $id = request()->segment(4);
+        $bill = DB::table('bills')->where('id','=', $id)->first();
+
+        $sender = DB::table('bill_persons')
+                ->join('bills', 'bills.sender', '=', 'bill_persons.id')
+                ->where('bills.id','=', $bill->id)
+                ->first();
+
+        $receiver = DB::table('bill_persons')
+                ->join('bills', 'bills.receiver', '=', 'bill_persons.id')
+                ->where('bills.id','=', $bill->id)
+                ->first();
+
+        $bill->senderInfo = $sender;
+        $bill->receiverInfo = $receiver;
+
+        $bill_items = DB::table('bill_items')
+                ->where('bill_id','=', $id)
+                ->get();
+
+        $bill->itemsList = $bill_items;
+        return view('pages.bills.single')->with('page_title', 'Chi tiết hóa đơn')->with('bill', $bill);
     }
 
     /**
@@ -129,7 +173,28 @@ class BillController extends Controller
      */
     public function edit($id)
     {
-        return view('pages.bills.update')->with('page_title', 'Sửa hóa đơn');
+        $id = request()->segment(4);
+        $bill = DB::table('bills')->where('id','=', $id)->first();
+
+        $sender = DB::table('bill_persons')
+                ->join('bills', 'bills.sender', '=', 'bill_persons.id')
+                ->where('bills.id','=', $bill->id)
+                ->first();
+
+        $receiver = DB::table('bill_persons')
+                ->join('bills', 'bills.receiver', '=', 'bill_persons.id')
+                ->where('bills.id','=', $bill->id)
+                ->first();
+
+        $bill->senderInfo = $sender;
+        $bill->receiverInfo = $receiver;
+        $bill_items = DB::table('bill_items')
+                ->where('bill_id','=', $id)
+                ->get();
+
+        $bill->itemsList = $bill_items;
+
+        return view('pages.bills.update')->with('page_title', 'Sửa hóa đơn')->with('bill', $bill);
     }
 
     /**
@@ -141,7 +206,65 @@ class BillController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'createdBy' => 'required',
+            'type' => 'required',
+            'title' => 'required',
+            'senderInfo' => 'required',
+            'receiverInfo' => 'required',
+            'items' => 'present|array'
+        ]);
+
+        if($validator->fails()){
+            return response()->json([
+                'status' => 'fail',
+                'errors' => $validator->errors()
+            ], 500);
+        }
+
+        $bill = Bill::find($request->input('id'));
+        $request->input('type') && $bill->type = $request->input('type');
+        $request->input('title') && $bill->title = $request->input('title');
+        $request->input('description') && $bill->description = $request->input('description');
+        $request->input('amount') && $bill->amount = $request->input('amount');
+        $request->input('total') && $bill->total = $request->input('total');
+        $bill->save();
+
+        $sender = BillPerson::find($bill->sender);
+        $request->input('senderInfo') && $sender->name = $request->input('senderInfo')['name'];
+        $request->input('senderInfo') && $sender->email = $request->input('senderInfo')['sender_email'];
+        $request->input('senderInfo') && $sender->phone = $request->input('senderInfo')['sender_phone'];
+        $request->input('senderInfo') && $sender->organization = $request->input('senderInfo')['sender_org'];
+        $sender->save();
+
+        $receiver = BillPerson::find($bill->receiver);
+        $request->input('receiverInfo') && $receiver->name = $request->input('receiverInfo')['name'];
+        $request->input('receiverInfo') && $receiver->email = $request->input('receiverInfo')['receiver_email'];
+        $request->input('receiverInfo') && $receiver->phone = $request->input('receiverInfo')['receiver_phone'];
+        $request->input('receiverInfo') && $receiver->organization = $request->input('receiverInfo')['receiver_org'];
+        $receiver->save();
+
+        $this->deleteBillItemByBillId($bill->id);
+        $this->addBillItems($request->input('items'), $bill->id);
+
+        return response()->json("OK");
+    }
+
+    private function addBillItems($items, $bill_id){
+        foreach ($items as $item) {
+            $new_item = new BillItems;
+            $new_item->bill_id = $bill_id;
+            $new_item->name = $item['name'];
+            $new_item->unit_price = $item['unit_price'];
+            $new_item->quantity = $item['quantity'];
+            $new_item->short_desc = $item['short_desc'];
+            $new_item->total = $item['total'];
+            $new_item->save();
+        }
+    }
+
+    private function deleteBillItemByBillId($bill_id){
+        return DB::table('bill_items')->where('bill_id','=',$bill_id)->delete();
     }
 
     /**
@@ -152,6 +275,13 @@ class BillController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $bill = Bill::find($id);
+            $bill->status = 'DELETED';
+            $bill->save();
+            return response()->json("OK");
+        } catch (\Throwable $th) {
+            return response()->json("Something went wrong", 500);
+        }
     }
 }
